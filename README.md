@@ -1,5 +1,8 @@
 # 四级单词 · 无痛背单词
 
+> ### 在线使用（打开链接即可开始背单词，无需安装任何东西）
+> ## https://ZiChen-hub.github.io/LearnEnglish/
+
 一个**纯前端、零依赖、打开即用**的大学英语四级背单词工具。用记忆卡片 + 艾宾浩斯记忆周期把"背单词"拆成轻松的每日小任务：点一下翻卡看释义，听一遍发音，选一次"记住了 / 有点印象 / 不认识"，系统自动安排下次复习时间。
 
 面向备考四级的同学，界面简约清爽，**无广告、无弹窗、无注册、无后端**，所有学习数据都存在你自己的浏览器里。
@@ -88,6 +91,7 @@ LearnEnglish/
 │   └── words.js            # 同一份数据的 JS 包装，用于 file:// 直接打开时离线加载
 ├── tools/
 │   └── build_wordbook.py   # 词库下载 / 清洗 / 校验 / 生成脚本
+├── .nojekyll               # 空文件，关闭 GitHub Pages 的 Jekyll 处理，避免静态资源异常
 └── README.md               # 本文档
 ```
 
@@ -98,11 +102,19 @@ LearnEnglish/
 
 ## 四、使用方法
 
-### 方式一：直接打开（最简单）
+### 方式一：在线使用（推荐，打开链接就能用）
+
+直接访问：
+
+### **<https://ZiChen-hub.github.io/LearnEnglish/>**
+
+无需下载、无需安装、无需注册，打开即可开始背单词，手机浏览器同样支持。学习进度保存在当前浏览器的 `localStorage` 中。
+
+### 方式二：直接打开本地文件
 
 下载 / 克隆本项目后，**双击 `index.html`** 即可开始背单词，无需安装任何东西、无需启动服务。
 
-### 方式二：本地运行（推荐，体验与线上一致）
+### 方式三：本地运行（体验与线上完全一致）
 
 在项目根目录执行任意一条命令，然后访问 <http://localhost:8000>：
 
@@ -116,7 +128,7 @@ npx http-server -p 8000
 
 打开 <http://localhost:8000/index.html> 即可使用。
 
-### 方式三：重新生成词库（可选）
+### 方式四：重新生成词库（可选）
 
 需要联网，会自动从上述两个开源仓库拉取原始数据：
 
@@ -130,34 +142,59 @@ python3 tools/build_wordbook.py
 
 ## 五、GitHub Pages 部署指引
 
+### 当前状态：已开启 ✅
+
+本仓库的 GitHub Pages **已配置好并生效**，发布源为 `main` 分支根目录（`/`）：
+
+### **在线地址：<https://ZiChen-hub.github.io/LearnEnglish/>**
+
+`git push` 之后约 1 分钟页面会自动更新，直接打开上面的链接即可使用。
+
+### 本项目开启 Pages 的完整步骤（供参考 / 复刻）
+
 1. 把本项目推送到 GitHub 仓库（例如 `https://github.com/<你的用户名>/LearnEnglish`）：
 
    ```bash
    git init
-   git add index.html data tools README.md
+   git add .
    git commit -m "feat: 四级单词无痛背单词工具（词库+记忆卡片+艾宾浩斯复习）"
    git branch -M main
    git remote add origin https://github.com/<你的用户名>/LearnEnglish.git
    git push -u origin main
    ```
 
-2. 打开仓库页面 → **Settings** → 左侧 **Pages**。
+2. 在项目根目录放一个空的 `.nojekyll` 文件（本项目已包含）——GitHub Pages 默认会用 Jekyll 处理站点，遇到以下划线开头的目录或特殊文件时可能报错 / 漏掉静态资源，`.nojekyll` 可关闭该处理，确保 `data/words.json`、`data/words.js` 等资源被原样发布：
 
-3. 在 **Build and deployment** → **Source** 选择 `Deploy from a branch`；
+   ```bash
+   touch .nojekyll
+   git add .nojekyll && git commit -m "chore: 添加 .nojekyll 关闭 Jekyll" && git push
+   ```
+
+3. 打开仓库页面 → **Settings** → 左侧 **Pages**。
+
+4. 在 **Build and deployment** → **Source** 选择 `Deploy from a branch`；
    **Branch** 选择 `main`，目录选择 **`/ (root)`**，点击 **Save**。
 
-4. 等待 1~2 分钟，页面顶部会出现站点地址，形如：
+5. 等待 1~2 分钟，页面顶部会出现站点地址，形如：
 
    ```
    https://<你的用户名>.github.io/LearnEnglish/
    ```
 
-5. 用这个地址打开即可。因为全部是静态文件、数据在 `localStorage`，Pages 上无需任何额外配置。手机浏览器访问同一地址即可继续学习（**注意：不同设备 / 浏览器的学习进度相互独立**）。
+   也可以用命令行一步开启（需已登录 `gh`）：
+
+   ```bash
+   gh api -X POST repos/<你的用户名>/LearnEnglish/pages \
+     -f 'source[branch]=main' -f 'source[path]=/'
+   ```
+
+6. 打开站点即可使用。因为全部是静态文件、数据保存在 `localStorage`，Pages 上无需任何额外配置。手机浏览器访问同一地址即可继续学习（**注意：不同设备 / 浏览器的学习进度相互独立**）。
 
 > 如果页面显示 404，请确认：
 > - `Settings → Pages` 的分支与目录选对（`main` + `/ (root)`）；
 > - `index.html` 位于仓库根目录；
-> - 仓库为 Public（免费账号的 Pages 仅支持公开仓库）。
+> - 仓库为 Public（免费账号的 Pages 仅支持公开仓库）；
+> - 刚开启时首次构建需要 1~2 分钟，稍等后刷新即可。
 
 ---
 
