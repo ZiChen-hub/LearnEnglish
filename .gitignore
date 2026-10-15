@@ -1,0 +1,8 @@
+# 词库构建脚本的下载缓存（原始数据包，不入库）
+.cache/
+
+# 系统与编辑器文件
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
