@@ -142,13 +142,17 @@ python3 tools/build_wordbook.py
 
 ## 五、GitHub Pages 部署指引
 
-### 当前状态：已开启 ✅
+### 当前状态：已开启并在线 ✅
 
-本仓库的 GitHub Pages **已配置好并生效**，发布源为 `main` 分支根目录（`/`）：
+本仓库的 GitHub Pages **已开启、构建成功**，打开链接即可直接使用：
 
 ### **在线地址：<https://ZiChen-hub.github.io/LearnEnglish/>**
 
-`git push` 之后约 1 分钟页面会自动更新，直接打开上面的链接即可使用。
+站点内容就是仓库根目录（`index.html` + `data/` + `.nojekyll`）。发布源当前为 `gh-pages` 分支根目录，而该分支的内容与 `main` 分支根目录**完全一致（同一个提交）**，所以线上展示的页面与"发布 `main` 分支根目录"完全相同，效果没有差别。
+
+> 说明：本项目使用的自动化令牌没有"修改仓库 Pages 设置"的权限，因此无法用命令把发布源的**名称**从 `gh-pages` 改成 `main`（接口返回 403）。若你希望 Pages 设置页里显示的就是 `main` 分支 `/ (root)`，只需在 **Settings → Pages → Build and deployment → Source** 选择 `Deploy from a branch`、Branch 选 `main`、目录选 `/ (root)` 并保存即可。切换后 URL 与页面内容都不会变化。
+
+> 更新线上内容：当前发布源为 `gh-pages`，推送 `main` 后需同步到 `gh-pages`（`git push origin main:gh-pages`）才会刷新线上页面；若已切回 `main` 发布源，则推送 `main` 后约 1 分钟自动更新。
 
 ### 本项目开启 Pages 的完整步骤（供参考 / 复刻）
 
@@ -181,10 +185,15 @@ python3 tools/build_wordbook.py
    https://<你的用户名>.github.io/LearnEnglish/
    ```
 
-   也可以用命令行一步开启（需已登录 `gh`）：
+   也可以用命令行开启 / 修改发布源（需已登录 `gh`，且令牌具备仓库 Pages 写权限）：
 
    ```bash
+   # 首次开启（仓库尚未启用 Pages）
    gh api -X POST repos/<你的用户名>/LearnEnglish/pages \
+     -f 'source[branch]=main' -f 'source[path]=/'
+
+   # 已启用、只想把发布源改成 main 分支根目录
+   gh api -X PUT repos/<你的用户名>/LearnEnglish/pages \
      -f 'source[branch]=main' -f 'source[path]=/'
    ```
 
